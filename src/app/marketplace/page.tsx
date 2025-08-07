@@ -22,7 +22,7 @@ type Product = {
   const [mounted, setMounted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
-
+  const [loading , setLoading] = useState(false);
 
 
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -34,6 +34,7 @@ type Product = {
 
   const fetchProducts = async () => {
     try {
+      setLoading(true);
       const response = await fetch('/api/get');
       
       if (!response.ok) {
@@ -45,6 +46,7 @@ type Product = {
     } catch (error) {
       console.error('Error fetching products:', error);
     } 
+    setLoading(false);
   };
 
   const openImagePreview = (product: Product) => {
@@ -93,6 +95,15 @@ type Product = {
 
   if (!mounted) {
     return null;
+  }
+
+
+if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">    
+        <div className="text-white">Loading products...</div>
+      </div>
+    );
   }
 
   return (
